@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884982712023",
+    "project_id": "codeli-news",
+    "storage_bucket": "codeli-news.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884982712023:android:a005e0441ced4c6c07d292",
+        "android_client_info": {
+          "package_name": "br.com.codeli.codeli"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd0tZgXOikdzK1ySA23yI5HdvdU7MGDR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
