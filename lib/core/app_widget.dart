@@ -1,3 +1,4 @@
+import 'package:codeli/pages/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Codeli',
-      home: Text('Codeli'),
+      home: SplashPage(),
     );
   }
 }
