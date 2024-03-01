@@ -1,10 +1,21 @@
 import 'package:codeli/core/core.dart';
+import 'package:codeli/pages/forgot_password/forgot_password_page_controller.dart';
+import 'package:codeli/shared/utils/schema_validate.dart';
 import 'package:codeli/shared/widgets/button_widget/button_widget.dart';
 import 'package:codeli/shared/widgets/input_widget/input_widget.dart';
 import 'package:flutter/material.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
+class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
+
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final controller = ForgotPasswordController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,35 +37,50 @@ class ForgotPasswordPage extends StatelessWidget {
                 const SizedBox(
                   height: double.minPositive,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Esqueceu sua senha?",
-                      style: AppTextStyles.heading30Primary,
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      "Envie uma solicitação de redefinição de senha, basta inserir seu e-mail e prossegui com os passos recebidos no e-mail!",
-                      style: AppTextStyles.body16White,
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: InputWidget(placeholder: 'E-mail'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 16),
-                      child: ButtonWidget.primary(
-                        label: "Enviar",
-                        onTap: () {},
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Esqueceu sua senha?",
+                        style: AppTextStyles.heading30Primary,
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        "Envie uma solicitação de redefinição de senha, basta inserir seu e-mail e prossegui com os passos recebidos no e-mail!",
+                        style: AppTextStyles.body16White,
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: InputWidget(
+                            placeholder: 'E-mail',
+                            type: TextInputType.emailAddress,
+                            controller: controller.email,
+                            validator: (value) => validateEmail(value)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 16),
+                        child: ButtonWidget.primary(
+                          label: "Enviar",
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Processing Data"),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
