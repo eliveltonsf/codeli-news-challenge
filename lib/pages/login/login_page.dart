@@ -2,7 +2,9 @@ import 'package:codeli/core/core.dart';
 import 'package:codeli/pages/forgot_password/forgot_password_page.dart';
 import 'package:codeli/pages/login/login_page_controller.dart';
 import 'package:codeli/pages/register/register_page.dart';
+import 'package:codeli/services/auth_service.dart';
 import 'package:codeli/shared/utils/schema_validate.dart';
+import 'package:codeli/shared/widgets/show_snackbar_widget/show_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:codeli/shared/widgets/button_widget/button_widget.dart';
 import 'package:codeli/shared/widgets/input_widget/input_widget.dart';
@@ -18,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final controller = LoginPageController();
 
+  AuthService authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: const BoxDecoration(gradient: AppGradients.linear),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: ListView(
               children: [
                 SizedBox(
                   width: 200,
@@ -83,11 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                           label: "Login",
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Processing Data"),
-                                ),
-                              );
+                              _handleLogin(
+                                  email: controller.email.text,
+                                  password: controller.password.text);
                             }
                           },
                         ),
@@ -122,6 +123,25 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  _handleLogin({required String email, required String password}) {
+    authService.handleLogin(email: email, password: password).then(
+      (String? error) {
+        if (error == null) {
+          showSnackBarWidget(
+            context: context,
+            message: 'Conta logada com sucesso',
+            isErro: false,
+          );
+        } else {
+          showSnackBarWidget(
+            context: context,
+            message: error,
+          );
+        }
+      },
     );
   }
 }
