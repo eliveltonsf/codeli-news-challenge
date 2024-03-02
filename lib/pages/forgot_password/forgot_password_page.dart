@@ -1,8 +1,11 @@
 import 'package:codeli/core/core.dart';
 import 'package:codeli/pages/forgot_password/forgot_password_page_controller.dart';
+import 'package:codeli/pages/login/login_page.dart';
+import 'package:codeli/services/auth_service.dart';
 import 'package:codeli/shared/utils/schema_validate.dart';
 import 'package:codeli/shared/widgets/button_widget/button_widget.dart';
 import 'package:codeli/shared/widgets/input_widget/input_widget.dart';
+import 'package:codeli/shared/widgets/show_snackbar_widget/show_snackbar_widget.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -16,6 +19,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final controller = ForgotPasswordController();
 
   final _formKey = GlobalKey<FormState>();
+
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +75,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           label: "Enviar",
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Processing Data"),
-                                ),
-                              );
+                              _handleForgotPassword(
+                                  email: controller.email.text);
                             }
                           },
                         ),
@@ -110,5 +112,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       ),
     );
+  }
+
+  _handleForgotPassword({required String email}) {
+    authService.handleForgotPassword(email: email).then((String? error) {
+      if (error == null) {
+        showSnackBarWidget(
+            context: context,
+            message: "E-mail de redefinição enviado!",
+            isErro: false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      } else {
+        showSnackBarWidget(context: context, message: error);
+      }
+    });
   }
 }
